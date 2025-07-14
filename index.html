@@ -17,9 +17,11 @@
             --primary: #121212;
             --secondary: #f8f8f8;
             --accent: #c7a17a;
+            --accent-dark: #a8865c;
             --text: #333;
             --light-text: #777;
             --overlay: rgba(0, 0, 0, 0.7);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         body {
@@ -28,6 +30,19 @@
             background-color: var(--secondary);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         h1, h2, h3, h4 {
@@ -43,21 +58,42 @@
 
         .btn {
             display: inline-block;
-            padding: 12px 30px;
+            padding: 14px 34px;
             background-color: var(--accent);
             color: white;
             text-decoration: none;
             border-radius: 30px;
-            font-weight: 500;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            letter-spacing: 1.5px;
+            transition: var(--transition);
             border: 2px solid var(--accent);
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-dark);
+            transition: var(--transition);
+            z-index: -1;
         }
 
         .btn:hover {
-            background-color: transparent;
-            color: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(199, 161, 122, 0.3);
+        }
+
+        .btn:hover::before {
+            left: 0;
         }
 
         .btn-outline {
@@ -65,42 +101,49 @@
             color: var(--accent);
         }
 
+        .btn-outline::before {
+            background: var(--accent);
+        }
+
         .btn-outline:hover {
-            background-color: var(--accent);
             color: white;
         }
 
         section {
-            padding: 80px 0;
+            padding: 100px 0;
+            position: relative;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 70px;
         }
 
         .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
             position: relative;
             display: inline-block;
+            color: var(--primary);
         }
 
         .section-header h2::after {
             content: '';
             position: absolute;
-            width: 80px;
-            height: 3px;
-            background-color: var(--accent);
-            bottom: -10px;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
+            border-radius: 4px;
         }
 
         .section-header p {
             max-width: 700px;
-            margin: 20px auto 0;
+            margin: 30px auto 0;
             color: var(--light-text);
+            font-size: 1.1rem;
         }
 
         /* Header Styles */
@@ -111,13 +154,14 @@
             width: 100%;
             padding: 20px 0;
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
         }
 
         header.scrolled {
             padding: 15px 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
         }
 
         .header-container {
@@ -128,13 +172,21 @@
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             color: white;
             text-decoration: none;
+            display: flex;
+            align-items: center;
         }
 
         .logo span {
+            color: var(--accent);
+            margin-left: 5px;
+        }
+
+        .logo i {
+            margin-right: 10px;
             color: var(--accent);
         }
 
@@ -144,7 +196,7 @@
         }
 
         nav ul li {
-            margin-left: 30px;
+            margin-left: 35px;
         }
 
         nav ul li a {
@@ -152,13 +204,30 @@
             text-decoration: none;
             font-weight: 500;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             letter-spacing: 1px;
-            transition: color 0.3s ease;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: 0;
+            left: 0;
+            transition: var(--transition);
         }
 
         nav ul li a:hover {
             color: var(--accent);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
         }
 
         .mobile-menu-btn {
@@ -166,37 +235,65 @@
             background: none;
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
+            z-index: 1001;
         }
 
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(var(--overlay), var(--overlay)), url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1630&q=80') center/cover no-repeat;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%), 
+                        url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1630&q=80') center/cover no-repeat;
             display: flex;
             align-items: center;
             text-align: center;
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.7) 100%);
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
         }
 
         .hero-content h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            line-height: 1.2;
+            font-size: 4.5rem;
+            margin-bottom: 25px;
+            line-height: 1.15;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease;
         }
 
         .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            max-width: 600px;
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 300;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInUp 1s ease 0.6s both;
         }
 
         /* About Section */
@@ -207,21 +304,35 @@
         .about-content {
             display: flex;
             align-items: center;
-            gap: 50px;
+            gap: 70px;
         }
 
         .about-img {
             flex: 1;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .about-img::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .about-img img {
             width: 100%;
             height: auto;
             display: block;
-            transition: transform 0.5s ease;
+            transition: transform 0.8s ease;
         }
 
         .about-img:hover img {
@@ -233,36 +344,54 @@
         }
 
         .about-text h3 {
-            font-size: 2rem;
-            margin-bottom: 20px;
+            font-size: 2.3rem;
+            margin-bottom: 25px;
+            color: var(--primary);
         }
 
         .about-text p {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             color: var(--light-text);
+            font-size: 1.05rem;
         }
 
         .stats {
             display: flex;
-            margin-top: 30px;
-            gap: 30px;
+            margin-top: 40px;
+            gap: 40px;
+            flex-wrap: wrap;
         }
 
         .stat-item {
             text-align: center;
+            position: relative;
+            padding: 0 15px;
+        }
+
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: #ddd;
         }
 
         .stat-item .number {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             color: var(--accent);
             font-family: 'Playfair Display', serif;
+            line-height: 1;
         }
 
         .stat-item .label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            color: var(--light-text);
+            margin-top: 8px;
         }
 
         /* Services Section */
@@ -272,57 +401,118 @@
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
         }
 
         .service-card {
             background-color: white;
-            padding: 40px 30px;
+            padding: 45px 35px;
             text-align: center;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--accent);
+            transition: var(--transition);
+            z-index: -1;
         }
 
         .service-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .service-card:hover::before {
+            height: 100%;
+        }
+
+        .service-card:hover .service-icon,
+        .service-card:hover h3,
+        .service-card:hover p {
+            color: white;
         }
 
         .service-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: var(--accent);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            transition: var(--transition);
         }
 
         .service-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            transition: var(--transition);
         }
 
         .service-card p {
             color: var(--light-text);
+            transition: var(--transition);
         }
 
         /* Portfolio Section */
+        .portfolio {
+            background-color: white;
+        }
+
+        .portfolio-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
 
         .portfolio-item {
             position: relative;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            height: 300px;
+            height: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .portfolio-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.8s ease;
         }
 
         .portfolio-overlay {
@@ -331,14 +521,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(199, 161, 122, 0.85);
+            background: rgba(199, 161, 122, 0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.5s ease;
-            padding: 20px;
+            transition: var(--transition);
+            padding: 30px;
             text-align: center;
             color: white;
         }
@@ -352,19 +542,34 @@
         }
 
         .portfolio-overlay h3 {
-            margin-bottom: 10px;
-            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            transform: translateY(20px);
+            transition: var(--transition);
+            opacity: 0;
         }
 
         .portfolio-overlay p {
             font-style: italic;
+            transform: translateY(20px);
+            transition: var(--transition);
+            opacity: 0;
+            transition-delay: 0.1s;
+        }
+
+        .portfolio-item:hover .portfolio-overlay h3,
+        .portfolio-item:hover .portfolio-overlay p {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* Testimonials */
         .testimonials {
-            background: linear-gradient(var(--overlay), var(--overlay)), url('https://images.unsplash.com/photo-1519457431-44ccd64a579b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover fixed;
+            background: linear-gradient(135deg, var(--overlay) 0%, rgba(0,0,0,0.8) 100%), 
+                        url('https://images.unsplash.com/photo-1519457431-44ccd64a579b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover fixed;
             color: white;
             text-align: center;
+            position: relative;
         }
 
         .testimonials .section-header h2 {
@@ -372,38 +577,47 @@
         }
 
         .testimonial-slider {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            position: relative;
         }
 
         .testimonial {
-            padding: 40px;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 0 20px;
         }
 
         .testimonial-text {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-style: italic;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             position: relative;
+            line-height: 1.8;
         }
 
         .testimonial-text::before,
         .testimonial-text::after {
             content: '"';
-            font-size: 3rem;
+            font-size: 5rem;
             color: var(--accent);
             position: absolute;
             opacity: 0.3;
+            font-family: serif;
+            line-height: 1;
         }
 
         .testimonial-text::before {
-            top: -20px;
-            left: -20px;
+            top: -30px;
+            left: -30px;
         }
 
         .testimonial-text::after {
-            bottom: -40px;
-            right: -20px;
+            bottom: -60px;
+            right: -30px;
+            transform: rotate(180deg);
         }
 
         .client-info {
@@ -413,12 +627,13 @@
         }
 
         .client-img {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             overflow: hidden;
-            margin-right: 15px;
+            margin-right: 20px;
             border: 3px solid var(--accent);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .client-img img {
@@ -428,13 +643,13 @@
         }
 
         .client-details h4 {
-            margin-bottom: 5px;
-            font-size: 1.2rem;
+            margin-bottom: 8px;
+            font-size: 1.3rem;
         }
 
         .client-details p {
             color: #ccc;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         /* Contact Section */
@@ -444,54 +659,71 @@
 
         .contact-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 60px;
         }
 
         .contact-info h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--primary);
         }
 
         .contact-detail {
             display: flex;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            align-items: flex-start;
         }
 
         .contact-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background-color: rgba(199, 161, 122, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
+            margin-right: 20px;
             color: var(--accent);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            flex-shrink: 0;
         }
 
         .contact-text h4 {
-            margin-bottom: 5px;
-            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .contact-text p {
+            color: var(--light-text);
+            line-height: 1.7;
         }
 
         .contact-form .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .contact-form input,
         .contact-form textarea {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(199, 161, 122, 0.2);
         }
 
         .contact-form textarea {
-            height: 150px;
+            height: 180px;
             resize: vertical;
         }
 
@@ -499,53 +731,83 @@
         footer {
             background-color: var(--primary);
             color: white;
-            padding: 60px 0 30px;
+            padding: 80px 0 40px;
+            position: relative;
+        }
+
+        .footer-top {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .footer-top a {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            line-height: 60px;
+            transition: var(--transition);
+        }
+
+        .footer-top a:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .footer-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 50px;
+            margin-bottom: 50px;
         }
 
         .footer-col h4 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
             position: relative;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
         }
 
         .footer-col h4::after {
             content: '';
             position: absolute;
-            width: 50px;
-            height: 2px;
+            width: 60px;
+            height: 3px;
             background-color: var(--accent);
             bottom: 0;
             left: 0;
+            border-radius: 3px;
         }
 
         .footer-col p {
             color: #aaa;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            line-height: 1.8;
         }
 
         .social-links {
             display: flex;
             gap: 15px;
+            margin-top: 20px;
         }
 
         .social-links a {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             color: white;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            font-size: 1.2rem;
         }
 
         .social-links a:hover {
@@ -558,35 +820,84 @@
         }
 
         .footer-col ul li {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
 
         .footer-col ul li a {
             color: #aaa;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: var(--transition);
+            display: block;
         }
 
         .footer-col ul li a:hover {
             color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .footer-col form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-col input {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .copyright {
             text-align: center;
-            padding-top: 30px;
+            padding-top: 40px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: #aaa;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .hero-content h1 {
+                font-size: 3.8rem;
+            }
+        }
+
         @media (max-width: 992px) {
             .hero-content h1 {
-                font-size: 3rem;
+                font-size: 3.2rem;
             }
 
             .about-content {
                 flex-direction: column;
+            }
+
+            .about-img {
+                max-width: 600px;
+                margin: 0 auto 50px;
             }
 
             .portfolio-grid {
@@ -601,55 +912,72 @@
 
             nav ul {
                 position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
                 background-color: var(--primary);
                 flex-direction: column;
                 align-items: center;
-                justify-content: flex-start;
-                padding-top: 50px;
-                transition: all 0.5s ease;
+                justify-content: center;
+                padding-top: 80px;
+                transition: var(--transition);
+                z-index: 1000;
             }
 
             nav ul.active {
-                left: 0;
+                right: 0;
             }
 
             nav ul li {
-                margin: 15px 0;
+                margin: 20px 0;
             }
 
             .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .stats {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            section {
-                padding: 60px 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-content h1 {
-                font-size: 2rem;
+                font-size: 2.6rem;
             }
 
             .hero-content p {
-                font-size: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+
+            .section-header h2 {
+                font-size: 2.3rem;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .testimonial {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
             }
 
             .portfolio-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .contact-container {
+                gap: 40px;
+            }
+
+            .footer-container {
+                gap: 40px;
             }
         }
     </style>
@@ -658,7 +986,7 @@
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <a href="#" class="logo">Geetham<span>Studio</span></a>
+            <a href="#" class="logo"><i class="fas fa-camera"></i>Geetham<span>Studio</span></a>
             <button class="mobile-menu-btn">
                 <i class="fas fa-bars"></i>
             </button>
@@ -679,7 +1007,7 @@
     <section class="hero">
         <div class="container hero-content">
             <h1>Capturing Life's Beautiful Moments</h1>
-            <p>Professional photography studio specializing in portraits, weddings, and commercial photography with a creative touch</p>
+            <p>Professional photography studio specializing in portraits, weddings, and commercial photography with a creative touch and artistic vision</p>
             <div class="hero-btns">
                 <a href="#portfolio" class="btn">View Portfolio</a>
                 <a href="#contact" class="btn btn-outline">Book a Session</a>
@@ -692,12 +1020,11 @@
         <div class="container">
             <div class="about-content">
                 <div class="about-img">
-                    <img src="image.jpg" alt="About Geetham Studio">
-                </div>
+ <img src="image.jpg" alt="About Geetham Studio">                </div>
                 <div class="about-text">
                     <h3>Our Story</h3>
                     <p>Founded in 2010, Geetham Studio has been capturing precious moments and creating timeless memories for over a decade. Our team of passionate photographers combines technical expertise with artistic vision to deliver exceptional results.</p>
-                    <p>We believe that every photograph tells a story, and we strive to capture the essence of each moment with creativity and precision. Our studio is equipped with state-of-the-art technology to ensure the highest quality images.</p>
+                    <p>We believe that every photograph tells a story, and we strive to capture the essence of each moment with creativity and precision. Our studio is equipped with state-of-the-art technology to ensure the highest quality images for every client.</p>
                     <div class="stats">
                         <div class="stat-item">
                             <div class="number">13+</div>
@@ -778,24 +1105,28 @@
                 <h2>Our Portfolio</h2>
                 <p>Explore our collection of work that showcases our creativity and expertise</p>
             </div>
+            <div class="portfolio-filter">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Wedding</button>
+                <button class="filter-btn">Portrait</button>
+                <button class="filter-btn">Commercial</button>
+                <button class="filter-btn">Events</button>
+            </div>
             <div class="portfolio-grid">
                 <div class="portfolio-item">
-                    <img src="image2.jpg" alt="Wedding Photography">
-                    <div class="portfolio-overlay">
+                    <img src="image2.jpg" alt="Wedding Photography">                    <div class="portfolio-overlay">
                         <h3>Elegant Wedding</h3>
                         <p>Outdoor ceremony in Tuscany</p>
                     </div>
                 </div>
                 <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1531891570158-e71b35a485bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" alt="Portrait Photography">
-                    <div class="portfolio-overlay">
+                    <img src="image3.jpg" alt="Portrait Photography">                    <div class="portfolio-overlay">
                         <h3>Corporate Portrait</h3>
                         <p>Executive headshot series</p>
                     </div>
                 </div>
                 <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Family Photography">
-                    <div class="portfolio-overlay">
+                    <img src="family.jpg" alt="Family Photography">                    <div class="portfolio-overlay">
                         <h3>Family Moments</h3>
                         <p>Beach sunset session</p>
                     </div>
@@ -808,8 +1139,7 @@
                     </div>
                 </div>
                 <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Event Photography">
-                    <div class="portfolio-overlay">
+                    <img src="corporateevent.jpg" alt="Event Photography">                    <div class="portfolio-overlay">
                         <h3>Corporate Event</h3>
                         <p>Annual conference coverage</p>
                     </div>
@@ -835,7 +1165,7 @@
             <div class="testimonial-slider">
                 <div class="testimonial">
                     <div class="testimonial-text">
-                        Geetham Studio captured our wedding day perfectly! They managed to capture every special moment without being intrusive. The photos are absolutely stunning and exceeded all our expectations.
+                        Geetham Studio captured our wedding day perfectly! They managed to capture every special moment without being intrusive. The photos are absolutely stunning and exceeded all our expectations. We'll cherish these memories forever.
                     </div>
                     <div class="client-info">
                         <div class="client-img">
@@ -921,11 +1251,14 @@
 
     <!-- Footer -->
     <footer>
+        <div class="footer-top">
+            <a href="#"><i class="fas fa-arrow-up"></i></a>
+        </div>
         <div class="container">
             <div class="footer-container">
                 <div class="footer-col">
                     <h4>Geetham Studio</h4>
-                    <p>Capturing life's most precious moments with creativity, passion, and technical excellence since 2010.</p>
+                    <p>Capturing life's most precious moments with creativity, passion, and technical excellence since 2010. We specialize in creating timeless memories through our lens.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -950,22 +1283,21 @@
                         <li><a href="#">Portrait Sessions</a></li>
                         <li><a href="#">Commercial Photography</a></li>
                         <li><a href="#">Event Coverage</a></li>
+                        <li><a href="#">Real Estate Photography</a></li>
                         <li><a href="#">Photo Editing</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Newsletter</h4>
-                    <p>Subscribe to our newsletter for photography tips and special offers.</p>
+                    <p>Subscribe to our newsletter for photography tips, special offers, and studio updates.</p>
                     <form>
-                        <div class="form-group">
-                            <input type="email" placeholder="Your Email" required>
-                        </div>
+                        <input type="email" placeholder="Your Email" required>
                         <button type="submit" class="btn">Subscribe</button>
                     </form>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Geetham Studio. All Rights Reserved.</p>
+                <p>&copy; 2025 Geetham Studio. All Rights Reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> for Photography</p>
             </div>
         </div>
     </footer>
@@ -984,11 +1316,21 @@
         // Mobile menu toggle
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navMenu = document.querySelector('nav ul');
+        const menuIcon = mobileMenuBtn.querySelector('i');
 
         mobileMenuBtn.addEventListener('click', function() {
             navMenu.classList.toggle('active');
-            this.querySelector('i').classList.toggle('fa-bars');
-            this.querySelector('i').classList.toggle('fa-times');
+            menuIcon.classList.toggle('fa-bars');
+            menuIcon.classList.toggle('fa-times');
+        });
+
+        // Close menu when clicking on links
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuIcon.classList.add('fa-bars');
+                menuIcon.classList.remove('fa-times');
+            });
         });
 
         // Smooth scrolling for anchor links
@@ -1001,31 +1343,36 @@
                         top: target.offsetTop - 80,
                         behavior: 'smooth'
                     });
-                    
-                    // Close mobile menu if open
-                    if (navMenu.classList.contains('active')) {
-                        navMenu.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').classList.add('fa-bars');
-                        mobileMenuBtn.querySelector('i').classList.remove('fa-times');
-                    }
                 }
             });
         });
 
-        // Simple testimonial slider
+        // Portfolio filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                // Filter functionality would go here
+            });
+        });
+
+        // Testimonial slider
         const testimonials = [
             {
-                text: "Geetham Studio captured our wedding day perfectly! They managed to capture every special moment without being intrusive. The photos are absolutely stunning and exceeded all our expectations.",
+                text: "Geetham Studio captured our wedding day perfectly! They managed to capture every special moment without being intrusive. The photos are absolutely stunning and exceeded all our expectations. We'll cherish these memories forever.",
                 name: "Michael Johnson",
                 role: "Wedding Client"
             },
             {
-                text: "The corporate portraits they took for our executive team were exceptional. Professional, high-quality, and they perfectly captured each individual's personality.",
+                text: "The corporate portraits they took for our executive team were exceptional. Professional, high-quality, and they perfectly captured each individual's personality. Highly recommended for any business needs!",
                 name: "Sarah Williams",
                 role: "Corporate Client"
             },
             {
-                text: "Our family photoshoot was such a wonderful experience. The photographer made us all feel comfortable and the results were natural, beautiful images we'll treasure forever.",
+                text: "Our family photoshoot was such a wonderful experience. The photographer made us all feel comfortable and the results were natural, beautiful images we'll treasure forever. Worth every penny!",
                 name: "Rajesh Kumar",
                 role: "Family Portrait Client"
             }
@@ -1054,8 +1401,17 @@
             currentTestimonial = (currentTestimonial + 1) % testimonials.length;
         }
 
-        // Change testimonial every 5 seconds
+        // Initialize and change testimonial every 5 seconds
+        changeTestimonial();
         setInterval(changeTestimonial, 5000);
+
+        // Form submission
+        const contactForm = document.querySelector('.contact-form form');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            contactForm.reset();
+        });
     </script>
 </body>
 </html>
